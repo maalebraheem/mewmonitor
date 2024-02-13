@@ -1,0 +1,71 @@
+<!-- index.html (Frontend) -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <canvas id="myChart" width="400" height="400"></canvas>
+
+    <script>
+        fetch('/data')
+            .then(response => response.json())
+            .then(data => {
+                const times = data.map(row => row[0]);
+                const reds = data.map(row => row[1]);
+                const yellows = data.map(row => row[2]);
+                const blues = data.map(row => row[3]);
+                const averages = data.map(row => row[4]);
+
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: times,
+                        datasets: [{
+                            label: 'Red',
+                            data: reds,
+                            borderColor: 'red',
+                            fill: false
+                        }, {
+                            label: 'Yellow',
+                            data: yellows,
+                            borderColor: 'yellow',
+                            fill: false
+                        }, {
+                            label: 'Blue',
+                            data: blues,
+                            borderColor: 'blue',
+                            fill: false
+                        }, {
+                            label: 'Average',
+                            data: averages,
+                            borderColor: 'green',
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Time'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Values'
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+    </script>
+</body>
+</html>
